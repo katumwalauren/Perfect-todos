@@ -1,10 +1,10 @@
 require("dotenv").config();
 const { MongoClient, ServerApiVersion } = require("mongodb");
 
-const uri = process.env.MONGODB_URL || "mongodb:/localhost: 27017/";
+const uri = process.env.MONGODB_URL ||  "mongodb://localhost:27017/todos"
 
 const options = {
-  ServerApi: {
+  serverApi: {
     version: ServerApiVersion.v1,
     strict: true,
     deprecationErrors: true,
@@ -12,17 +12,20 @@ const options = {
 };
 
 let client;
+
 const connectToMongoDB = async () => {
   if (!client) {
     try {
       client = await MongoClient.connect(uri, options);
-      console.log("Connected to MongoDB")
+      console.log("Connected to MongoDB");
     } catch (error) {
-      console.log(error);
+      console.error("Error connecting to MongoDB:", error);
+      throw error; 
     }
   }
   return client;
 };
 
 const getConnectedClient = () => client;
-module.exports = { connectToMongoDB , getConnectedClient };
+
+module.exports = { connectToMongoDB, getConnectedClient };
